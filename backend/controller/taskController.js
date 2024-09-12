@@ -2,8 +2,10 @@ const Task = require("../model/taskModel");
 const cron = require("node-cron");
 const sendEmail = require("../services/emailServices");
 
+let scheduledJobs = {};
+
 const scheduleTask = async (task) => {
-  cron.schedule(task.frequency, async () => {
+  const job = cron.schedule(task.frequency, async () => {
     console.log(`Scheduled task ${task.name} is running...`);
     try {
       await sendEmail(
@@ -19,6 +21,7 @@ const scheduleTask = async (task) => {
       console.error(`Error executing task ${task.name}: ${error.message}`);
     }
   });
+  scheduledJobs[task._id] = job;
 };
 
 const addTask = async (req, res) => {
@@ -64,17 +67,33 @@ const getTasks = async (req, res) => {
   }
 };
 
-const getATaskById = async (req, res) => {
+const stopTask = (taskId) => {
+  if (scheduledJobs[taskId]) {
+    scheduledJobs[taskId].stop();
+    delete scheduledJobs[taskId];
+  } else {
+    console.log(`No scheduled task found with ID ${taskId} to stop.`);
+  }
+};
+
+const stopScheduledTask = async (req, res) => {
+  const { taskid } = req.params;
+
   try {
-    const { id } = req.params;
-    const task = await Task.findById(id);
+    const task = await Task.findById(taskid);
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
 
+    console.log(`Stopping task ${taskid}`);
+    stopTask(taskid);
+
+    task.status = "Stopped";
+    await task.save();
+
     return res.status(200).json({
-      message: "Fetched task by ID",
+      message: `Task ${task.name} has been stopped.`,
       task,
     });
   } catch (error) {
@@ -82,4 +101,4 @@ const getATaskById = async (req, res) => {
   }
 };
 
-module.exports = { addTask, getTasks, getATaskById };
+module.exports = { addTask, getTasks, stopScheduledTask };

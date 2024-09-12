@@ -3,8 +3,8 @@ import "./App.css";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
 import TaskLogs from "./components/TaskLogs";
-import { getTasks } from "./api";
-import { ToastContainer } from "react-toastify";
+import { getTasks, stopTask } from "./api";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -27,6 +27,21 @@ function App() {
 
     fetchTasks();
   }, [refresh]);
+
+  const handleStopTask = async (taskId) => {
+    try {
+      await stopTask(taskId);
+      toast.success("Task stopped successfully!");
+      const updatedTasks = tasks.map((task) =>
+        task._id === taskId ? { ...task, status: "Stopped" } : task
+      );
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error("Error stopping task:", error.message);
+      toast.error("Error stopping task");
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4">
       <ToastContainer />
@@ -34,7 +49,7 @@ function App() {
         Task Scheduler
       </h1>
       <AddTaskForm onTaskAdded={handleTaskAdded} />
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} stopTask={handleStopTask} />
       <TaskLogs tasks={tasks} />
     </div>
   );

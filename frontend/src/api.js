@@ -9,3 +9,7 @@ export const addTask = async (task) => {
 export const getTasks = async () => {
   return await axios.get(`${BASE_URL}/tasks`);
 };
+
+export const stopTask = async (taskId) => {
+  return await axios.put(`${BASE_URL}/task/${taskId}`);
+};

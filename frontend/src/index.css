@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-input {
+  @apply w-full md:w-1/2 p-2 border-2 py-2 px-4 text-xl border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.task-div {
+  @apply p-4 m-4 border-2 rounded-lg shadow-lg;
+}
+
+.task-h2 {
+  @apply text-xl font-semibold mb-4 underline;
+}
+
+.task-li {
+  @apply p-3 border-2 border-gray-200 rounded-lg;
+}

@@ -71,7 +71,6 @@ const AddTaskForm = ({ onTaskAdded }) => {
           value={task.name}
           onChange={handleChange}
           placeholder="Enter Task Title"
-          required
           className="form-input"
         />
       </div>
@@ -83,7 +82,6 @@ const AddTaskForm = ({ onTaskAdded }) => {
           value={task.details}
           onChange={handleChange}
           placeholder="Enter Task Details"
-          required
           className="form-input"
         />
       </div>
@@ -95,7 +93,6 @@ const AddTaskForm = ({ onTaskAdded }) => {
           value={task.frequency}
           onChange={handleChange}
           placeholder="e.g. * * * * *"
-          required
           className="form-input"
         />
       </div>
@@ -106,8 +103,7 @@ const AddTaskForm = ({ onTaskAdded }) => {
           name="recipientEmail"
           value={task.recipientEmail}
           onChange={handleChange}
-          placeholder="Enter Valid EmailId!"
-          required
+          placeholder="amanullamulla394@gmail.com"
           className="form-input"
         />
       </div>

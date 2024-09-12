@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://mct-6.onrender.com/api";
 
 export const addTask = async (task) => {
   return await axios.post(`${BASE_URL}/task`, task);
